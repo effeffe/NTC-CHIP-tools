@@ -1,4 +1,5 @@
 #! /bin/bash
+FEL=sunxi-spl
 
 SPL=$1
 UBOOT=$2
@@ -8,24 +9,24 @@ INITRD=$5
 SCRIPT=$6
 
 echo == upload the SPL to SRAM and execute it ==
-fel spl $SPL
+${FEL} spl $SPL
 
 sleep 1 # wait for DRAM initialization to complete
 
 echo == upload the main u-boot binary to DRAM ==
-fel write 0x4a000000 $UBOOT
+${FEL} write 0x4a000000 $UBOOT
 
 echo == upload the kernel ==
-fel write 0x42000000 $KERNEL
+${FEL} write 0x42000000 $KERNEL
 
 echo == upload the DTB file ==
-fel write 0x43000000 $DTB
+${FEL} write 0x43000000 $DTB
 
 echo == upload the boot.scr file ==
-fel write 0x43100000 $SCRIPT
+${FEL} write 0x43100000 $SCRIPT
 
 echo == upload the initramfs file ==
-fel write 0x43300000 $INITRD
+${FEL} write 0x43300000 $INITRD
 
 echo == execute the main u-boot binary ==
-fel exe   0x4a000000
+${FEL} exe   0x4a000000
